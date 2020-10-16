@@ -1,0 +1,51 @@
+version: "3"
+
+#volumes:
+#  outside:
+#    external: false
+
+services:
+  mysql_root:
+    build: ./docker/mysql/    #Dockerfileからビルドすることを示す
+    volumes:
+      - ./docker/mysql/db:/docker-entrypoint-initdb.d  #初期データをマウントする場所
+    image: mysql_root # イメージの名前
+    ports:
+      - "127.0.0.1:3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root   #コンテナ内のMySQLを起動する際のパスワードを設定
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.2   # ipの固定化
+  mysql_child:
+    build: ./docker/mysql/ 
+#    volumes:
+#      - ./docker/mysql/db:/docker-entrypoint-initdb.d 
+    image: mysql_child 
+    ports:
+      - "127.0.0.1:53306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=child
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.3
+  symmetricds:
+    build: 
+      context: ./
+      dockerfile: ./docker/symmetricds/Dockerfile
+    volumes:
+#      - outside:/var/www
+      - ./symmetricds:/var/www
+    working_dir: /var/www
+    networks:
+      app_net:
+        ipv4_address: 172.30.0.4
+    tty: true
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.30.0.0/24
