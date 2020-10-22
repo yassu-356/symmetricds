@@ -15,6 +15,8 @@ services:
         ipv4_address: 172.30.0.2   # ipの固定化
   mysql_child:
     build: ./docker/mysql/ 
+    volumes:
+      - ./docker/mysql/db:/docker-entrypoint-initdb.d
     image: mysql_child 
     ports:
       - "127.0.0.1:53306:3306"
