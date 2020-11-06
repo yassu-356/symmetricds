@@ -20,6 +20,18 @@
 # under the License.
 #
 
+# mysqlコンテナが立ち上がるまで待つ
+sleep 30
+
+./bin/symadmin --engine root uninstall
+./bin/symadmin --engine child uninstall
+
+./bin/symadmin --engine root create-sym-tables
+./bin/symadmin --engine child create-sym-tables
+
+./bin/dbimport --engine root ./sql/init_sym_tables.sql
+#./bin/dbimport --engine child ./sql/init_sym_tables.sql
+
 . "`dirname "$0"`/setenv"
 cd "$SYM_HOME"
 exec "$SYM_JAVA" $SYM_OPTIONS -cp "$CLASSPATH" org.jumpmind.symmetric.SymmetricLauncher "$@"
