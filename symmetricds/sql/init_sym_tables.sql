@@ -32,7 +32,7 @@ insert into sym_node_group (node_group_id) values ('child');
 -- Node Group Links
 ------------------------------------------------------------------------------
 
-insert into sym_node_group_link (source_node_group_id, target_node_group_id, data_event_action) values ('root', 'child', 'W');
+insert into sym_node_group_link (source_node_group_id, target_node_group_id, data_event_action) values ('root', 'child', 'P');
 
 ------------------------------------------------------------------------------
 -- Triggers
